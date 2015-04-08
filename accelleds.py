@@ -4,8 +4,8 @@ from staccel import STAccel
 
 def led_angle():
     # make LED objects
-    l1 = pyb.Led(1)
-    l2 = pyb.Led(2)
+    l1 = pyb.LED(1)
+    l2 = pyb.LED(2)
     accel = STAccel()
 
     while True:
@@ -14,11 +14,11 @@ def led_angle():
 
         # turn on LEDs depending on angle
         if x < -10:
+            l2.on()
+            l1.off()
+        elif x > 10:
             l1.on()
             l2.off()
-        elif x > 10:
-            l1.off()
-            l2.on()
         else:
             l1.off()
             l2.off()
