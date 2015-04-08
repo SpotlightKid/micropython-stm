@@ -10,13 +10,13 @@ def led_angle():
 
     while True:
         # get x-axis
-        accel = accel.x() * 50
+        x = accel.x() * 50
 
         # turn on LEDs depending on angle
-        if accel < -10:
+        if x < -10:
             l1.on()
             l2.off()
-        elif accel > 10:
+        elif x > 10:
             l1.off()
             l2.on()
         else:
