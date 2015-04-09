@@ -4,6 +4,16 @@
 from midiconstants import *
 
 
+###################################################
+## Helper functions
+
+def is_status(byte):
+    return (byte & 0x80) == 0x80  # 1000 0000
+
+
+###################################################
+## API classes
+
 class MidiOut:
     """MIDI Output class."""
 
@@ -29,11 +39,11 @@ class MidiOut:
 
     def note_off(self, note, velocity=0, ch=None):
         """Send a 'Note Off' message."""
-        self.channel_message(NOTE_ON, note, velocity)
+        self.channel_message(NOTE_OFF, note, velocity)
 
     def note_on(self, note, velocity=127, ch=None):
         """Send a 'Note On' message."""
-        self.channel_message(NOTE_OFF, note, velocity)
+        self.channel_message(NOTE_ON, note, velocity)
 
     def pressure(self, value, note=None, ch=None):
         """Send an 'Aftertouch' or 'Channel Pressure' message.
@@ -113,18 +123,24 @@ class MidiOut:
 def main():
     import pyb
 
-    MAG = 127
-    serial = pyb.USB_VCP()
+    serial = pyb.UART(2, 31250)
     midiout = MidiOut(serial, channel=1)
-    accel = pyb.Accel()
     switch = pyb.Switch()
+
+    if hasattr(pyb, 'Accel'):
+        accel = pyb.Accel()
+        SCALE = 1.27
+    else:
+        from staccel import STAccel
+        accel = STAccel()
+        SCALE = 127
 
     while True:
         while not switch():
             pyb.delay(10)
 
-        note = abs(accel.x() * MAG)
-        velocity = abs(accel.y() * MAG)
+        note = abs(int(accel.x() * SCALE))
+        velocity = abs(int(accel.y() * SCALE))
         midiout.note_on(note, velocity)
 
         while switch():

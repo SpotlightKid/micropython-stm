@@ -15,7 +15,8 @@ NOTE_OFF = const(0x80)
 NOTE_ON = const(0x90)
 
 # 1010cccc 0nnnnnnn 0vvvvvvv (channel, note, velocity)
-POLYPHONIC_PRESSURE = AFTERTOUCH = const(0xA0)
+AFTERTOUCH = const(0xA0)
+POLYPHONIC_PRESSURE = AFTERTOUCH
 
 # 1011cccc 0ccccccc 0vvvvvvv (channel, controller, value)
 # see Channel Mode Messages!
@@ -43,8 +44,10 @@ MODULATION_WHEEL = const(0x01)
 BREATH_CONTROLLER = const(0x02)
 FOOT_CONTROLLER = const(0x04)
 PORTAMENTO_TIME = const(0x05)
-DATA_ENTRY = DATA_ENTRY_MSB = const(0x06)
-CHANNEL_VOLUME = VOLUME = const(0x07)
+DATA_ENTRY = const(0x06)
+DATA_ENTRY_MSB = DATA_ENTRY
+VOLUME = const(0x07)
+CHANNEL_VOLUME = VOLUME
 BALANCE = const(0x08)
 PAN = const(0x0A)
 EXPRESSION_CONTROLLER = const(0x0B)
@@ -110,7 +113,8 @@ GENERAL_PURPOSE_CONTROLLER_6 = const(0x51)
 GENERAL_PURPOSE_CONTROLLER_7 = const(0x52)
 GENERAL_PURPOSE_CONTROLLER_8 = const(0x53)
 # PTC, 0vvvvvvv is the source Note number
-PORTAMENTO_CONTROL = PTC = const(0x54)
+PTC = const(0x54)
+PORTAMENTO_CONTROL = PTC
 # Ext. Effects Depth
 EFFECTS_1 = const(0x5B)
 # Tremelo Depth
@@ -125,10 +129,14 @@ EFFECTS_5 = const(0x5F)
 DATA_INCREMENT = const(0x60)
 # controller value byte should be 0
 DATA_DECREMENT = const(0x61)
-NRPN_LSB = NON_REGISTERED_PARAMETER_NUMBER_LSB = const(0x62)
-NRPN_MSB = NON_REGISTERED_PARAMETER_NUMBER_MSB = const(0x63)
-RPN_LSB = REGISTERED_PARAMETER_NUMBER_LSB = const(0x64)
-RPN_MSB = REGISTERED_PARAMETER_NUMBER_MSB = const(0x65)
+NRPN_LSB = const(0x62)
+NON_REGISTERED_PARAMETER_NUMBER_LSB = NRPN_LSB
+NRPN_MSB = const(0x63)
+NON_REGISTERED_PARAMETER_NUMBER_MSB = NRPN_MSB
+RPN_LSB = const(0x64)
+REGISTERED_PARAMETER_NUMBER_LSB = RPN_LSB
+RPN_MSB = const(0x65)
+REGISTERED_PARAMETER_NUMBER_MSB = RPN_MSB
 
 # Channel Mode messages
 
@@ -157,7 +165,8 @@ SYSTEM_EXCLUSIVE = const(0xF0)
 
 # MIDI Time Code Quarter Frame
 # 11110001
-MIDI_TIME_CODE = MTC = const(0xF1)
+MTC = const(0xF1)
+MIDI_TIME_CODE = MTC
 
 # 11110010 0vvvvvvv 0wwwwwww (lo-position, hi-position)
 SONG_POSITION_POINTER = const(0xF2)
@@ -256,10 +265,3 @@ FPS_24 = const(0xE8)
 FPS_25 = const(0xE7)
 FPS_29 = const(0xE3)
 FPS_30 = const(0xE2)
-
-
-###################################################
-## Helper functions
-
-def is_status(byte):
-    return (byte & 0x80) == 0x80  # 1000 0000
