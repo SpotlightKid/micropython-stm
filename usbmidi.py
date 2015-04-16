@@ -1,13 +1,25 @@
 # -*- coding: utf-8 -*-
-"""Micro Python MIDI library"""
+"""Demonstration of using the MIDI library with the USB-Serial interface.
 
-import midi
+To use this, connect the Discovery board to the computer with a USB cable
+to the micro USB OTG connector and start a serial-to-MIDI converter program
+on the host computer::
+
+    ttymidi -s /dev/ttyACM0 [-v]
+
+And then use aconnect, qjackctl or similar to connect the ttymidi port to
+the input of your MIDI client.
+
+"""
+
+from midi import MidiOut
+
 
 def main():
     import pyb
 
     serial = pyb.USB_VCP()
-    midiout = midi.MidiOut(serial, channel=1)
+    midi = MidiOut(serial, channel=1)
     switch = pyb.Switch()
 
     if hasattr(pyb, 'Accel'):
@@ -24,12 +36,12 @@ def main():
 
         note = abs(int(accel.x() * SCALE))
         velocity = abs(int(accel.y() * SCALE))
-        midiout.note_on(note, velocity)
+        midi.note_on(note, velocity)
 
         while switch():
             pyb.delay(50)
 
-        midiout.note_off(note)
+        midi.note_off(note)
 
 
 if __name__ == '__main__':

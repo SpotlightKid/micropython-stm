@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Micro Python MIDI library"""
+"""Micro Python MIDI output library."""
 
 from midiconstants import *
 
@@ -31,11 +31,17 @@ class MidiOut:
         return '<MidiOut: device={} channel={}>'.format(
             self.device, self.channel)
 
-    def channel_message(self, command, *data, ch=None):
+    def send(self, msg):
         """Send a MIDI message to the serial device."""
-        command |= (ch if ch else self.channel) - 1 & 0xf
-        msg = bytearray([command] + [value & 0x7f for value in data])
-        self.device.write(msg)
+        return self.device.write(bytearray(msg))
+
+    # Channel Mode Messages
+
+    def channel_message(self, command, *data, ch=None):
+        """Send a MIDI channel mode message to the serial device."""
+        command = (command & 0xF0) | ((ch if ch else self.channel) - 1 & 0xf)
+        msg = [command] + [value & 0x7f for value in data]
+        self.send(msg)
 
     def note_off(self, note, velocity=0, ch=None):
         """Send a 'Note Off' message."""
@@ -62,7 +68,11 @@ class MidiOut:
         self.channel_message(CONTROLLER_CHANGE, control, value, ch=ch)
 
     def program_change(self, value, bank=None, ch=None):
-        """Send 'Program Change' message, preceded by 'Bank Select'."""
+        """Send a 'Program Change' message.
+
+        If *bank* is given, send 'Bank Select' LSB and MSB messages first.
+
+        """
         if bank:
             self.control_change(BANK_SELECT_LSB, bank, ch=ch)
             self.control_change(BANK_SELECT, bank >> 7, ch=ch)
@@ -76,6 +86,76 @@ class MidiOut:
 
         """
         self.channel_message(PITCH_BEND, value, value >> 7, ch=ch)
+
+    # System Common Messages
+
+    def time_code(self, frame, seconds=0, minutes=0, hours=0,
+                  rate=MTC_FRAME_RATE_25):
+        """Send a full set of eight 'MIDI Time Code Quarter Frame' messages."""
+        self.send([MTC, frame & 0xf])
+        self.send([MTC, 0x10 | ((frame >> 4) & 1])
+        self.send([MTC, 0x20 | (seconds & 0xf])
+        self.send([MTC, 0x30 | ((seconds >> 4) & 3)])
+        self.send([MTC, 0x40 | (minutes & 0xf)])
+        self.send([MTC, 0x50 | ((minutes >> 4) & 3)])
+        self.send([MTC, 0x60 | (hours & 0xf)])
+        self.send([MTC, 0x70 | (rate << 1) + (1 if hours > 15 else 0)])
+
+    def song_position(self, beats):
+        """Send 'Song Position Pointer' message.
+
+        *beats* is the number of MIDI beats since the start of the song
+        (1 beat = 6 MIDI clock ticks).
+
+        """
+        self.send([SONG_POSITION_POINTER, beats & 0x7f, (beats >> 7 & 0x7f)])
+
+    def song_select(self, song):
+        """Send 'Song Select' message."""
+        self.send([SONG_SELECT, song & 0x7f])
+
+    def tuning_request(self):
+        """Send 'Tuning Request' message."""
+        self.send([TUNING_REQUEST])
+
+    # System Real-Time Messages
+
+    def timing_clock(self):
+        """Send 'Timing Clock' message.
+
+        This should be sent out 24 times per quarter note.
+
+        """
+        self.send([TIMING_CLOCK])
+
+    def song_start(self):
+        """Send 'Start' (sequence) message."""
+        self.send([SONG_START])
+
+    def song_continue(self):
+        """Send 'Continue' (sequence) message."""
+        self.send([SONG_CONTINUE])
+
+    def song_stop(self):
+        """Send 'Stop' (sequence) message."""
+        self.send([SONG_STOP])
+
+    def active_sensing(self):
+        """Send 'Active Sensing' message."""
+        self.send([ACTIVE_SENSING])
+
+    def system_reset(self):
+        """Send 'System Reset' (sequence) message."""
+        self.send([SYSTEM_RESET])
+
+    # System Exclusive Messages
+
+    def system_exclusive(self, msg):
+        if msg[0] != SYSTEM_EXCLUSIVE or msg[-1] != END_OF_EXCLUSIVE:
+            raise ValueError("Invalid system exclusive message.")
+        self.send(msg)
+
+    # Controllers
 
     def modulation(self, value, fine=False, ch=None):
         """Send modulation control change."""
@@ -118,36 +198,3 @@ class MidiOut:
             self.all_notes_off(ch=ch)
             self.all_sound_off(ch=ch)
             self.reset_all_controllers(ch=ch)
-
-
-def main():
-    import pyb
-
-    serial = pyb.UART(2, 31250)
-    midiout = MidiOut(serial, channel=1)
-    switch = pyb.Switch()
-
-    if hasattr(pyb, 'Accel'):
-        accel = pyb.Accel()
-        SCALE = 1.27
-    else:
-        from staccel import STAccel
-        accel = STAccel()
-        SCALE = 127
-
-    while True:
-        while not switch():
-            pyb.delay(10)
-
-        note = abs(int(accel.x() * SCALE))
-        velocity = abs(int(accel.y() * SCALE))
-        midiout.note_on(note, velocity)
-
-        while switch():
-            pyb.delay(50)
-
-        midiout.note_off(note)
-
-
-if __name__ == '__main__':
-    main()
