@@ -12,7 +12,7 @@ the input of your MIDI client.
 
 """
 
-from midi import MidiOut
+from midi.midiout import MidiOut
 
 
 def main():

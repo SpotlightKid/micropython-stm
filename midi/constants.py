@@ -3,6 +3,11 @@
 ###################################################
 ## Definitions of the different midi events
 
+# For compatibility with CPython
+try:
+    const
+except NameError:
+    const = lambda x: x
 
 ###################################################
 ## Midi channel events (The most usual events)
@@ -167,7 +172,7 @@ SYSTEM_EXCLUSIVE = const(0xF0)
 # 11110001
 MTC = const(0xF1)
 MIDI_TIME_CODE = MTC
-MTC_FRAME_RATE_25 = const(0)
+MTC_FRAME_RATE_24 = const(0)
 MTC_FRAME_RATE_25 = const(2)
 MTC_FRAME_RATE_30_DROP = const(4)
 MTC_FRAME_RATE_30 = const(6)

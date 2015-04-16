@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """Micro Python MIDI output library."""
 
-from midiconstants import *
-
+from .constants import *
 
 ###################################################
 ## Helper functions
@@ -90,11 +89,11 @@ class MidiOut:
     # System Common Messages
 
     def time_code(self, frame, seconds=0, minutes=0, hours=0,
-                  rate=MTC_FRAME_RATE_25):
+                  rate=MTC_FRAME_RATE_24):
         """Send a full set of eight 'MIDI Time Code Quarter Frame' messages."""
         self.send([MTC, frame & 0xf])
-        self.send([MTC, 0x10 | ((frame >> 4) & 1])
-        self.send([MTC, 0x20 | (seconds & 0xf])
+        self.send([MTC, 0x10 | ((frame >> 4) & 1)])
+        self.send([MTC, 0x20 | (seconds & 0xf)])
         self.send([MTC, 0x30 | ((seconds >> 4) & 3)])
         self.send([MTC, 0x40 | (minutes & 0xf)])
         self.send([MTC, 0x50 | ((minutes >> 4) & 3)])
