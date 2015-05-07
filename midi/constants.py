@@ -172,13 +172,10 @@ SYSTEM_EXCLUSIVE = const(0xF0)
 # 11110001
 MTC = const(0xF1)
 MIDI_TIME_CODE = MTC
-MTC_FRAME_RATE_24 = const(0)
-MTC_FRAME_RATE_25 = const(2)
-MTC_FRAME_RATE_30_DROP = const(4)
-MTC_FRAME_RATE_30 = const(6)
 
 # 11110010 0vvvvvvv 0wwwwwww (lo-position, hi-position)
-SONG_POSITION_POINTER = const(0xF2)
+SPP = const(0xF2)
+SONG_POSITION_POINTER = SPP
 
 # 11110011 0sssssss (songnumber)
 SONG_SELECT = const(0xF3)
@@ -195,6 +192,12 @@ TUNING_REQUEST = const(0xF6)
 # End of system exclusive
 # 11110111
 END_OF_EXCLUSIVE = const(0xF7)
+
+# MIDI Time Code Formats
+MTC_FRAME_RATE_24 = const(0)
+MTC_FRAME_RATE_25 = const(2)
+MTC_FRAME_RATE_30_DROP = const(4)
+MTC_FRAME_RATE_30 = const(6)
 
 
 ###################################################
