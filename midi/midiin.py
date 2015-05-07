@@ -29,7 +29,7 @@ class MidiIn:
     def poll(self):
         """Poll the input device for newly received MIDI messages.
 
-        Calls the callback function for any completely received message.
+        Calls the callback function for any received complete message.
 
         """
         msgs = self._read()
