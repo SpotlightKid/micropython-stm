@@ -2,16 +2,17 @@
 
 Sets accelerometer range at +-2g.
 
-Returns list containing X,Y,Z axis acceleration values in 'g' units (9.8m/s^2).
+Returns tuple containing X,Y,Z axis acceleration values in 'g' units (9.8m/s^2).
 
 See:
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/Components/lis302dl/lis302dl.h
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/Components/lis302dl/lis302dl.c
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_accelerometer.c
-    STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_accelerometer.h
-    STM32Cube_FW_F4_V1.1.0/Projects/STM32F4-Discovery/Demonstrations/Src/main.c
+
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/Components/lis302dl/lis302dl.h
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/Components/lis302dl/lis302dl.c
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.c
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery.h
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_accelerometer.c
+* STM32Cube_FW_F4_V1.1.0/Drivers/BSP/STM32F4-Discovery/stm32f4_discovery_accelerometer.h
+* STM32Cube_FW_F4_V1.1.0/Projects/STM32F4-Discovery/Demonstrations/Src/main.c
 
 """
 
@@ -62,15 +63,15 @@ class STAccel:
         else:
             msg = 'LIS302DL or LIS3DSH accelerometer not present'
             if self._debug:
-                print(msg)
+                self.debug(msg)
             else:
-                raise Exception(msg)
+                raise IOError(msg)
 
     def debug(self, *msg):
         if self._debug:
             print(" ".join(str(m) for m in msg))
 
-    def convert_raw_to_g(self, x):
+    def _convert_raw_to_g(self, x):
         if x & 0x80:
             x = x - 256
         return x * self.sensitivity / 1000
@@ -82,7 +83,8 @@ class STAccel:
             addr |= READWRITE_CMD
         self.cs_pin.low()
         self.spi.send(addr)
-        #buf = self.spi.send_recv(bytearray(nbytes * [0])) # read data, MSB first
+        # read data, MSB first
+        #buf = self.spi.send_recv(bytearray(nbytes * [0]))
         buf = self.spi.recv(nbytes)
         self.cs_pin.high()
         return buf
@@ -100,13 +102,13 @@ class STAccel:
         return self.read_bytes(WHO_AM_I_ADDR, 1)[0]
 
     def x(self):
-        return self.convert_raw_to_g(self.read_bytes(OUT_X_ADDR, 1)[0])
+        return self._convert_raw_to_g(self.read_bytes(OUT_X_ADDR, 1)[0])
 
     def y(self):
-        return self.convert_raw_to_g(self.read_bytes(OUT_Y_ADDR, 1)[0])
+        return self._convert_raw_to_g(self.read_bytes(OUT_Y_ADDR, 1)[0])
 
     def z(self):
-        return self.convert_raw_to_g(self.read_bytes(OUT_Z_ADDR, 1)[0])
+        return self._convert_raw_to_g(self.read_bytes(OUT_Z_ADDR, 1)[0])
 
     def xyz(self):
         return (self.x(), self.y(), self.z())
