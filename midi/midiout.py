@@ -1,20 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Micro Python MIDI output library."""
+"""MicroPython MIDI output library."""
 
 from .constants import *
 
-###################################################
-## Helper functions
-
-def is_status(byte):
-    return (byte & 0x80) == 0x80  # 1000 0000
-
-
-###################################################
-## API classes
 
 class MidiOut:
-    """MIDI Output class."""
+    """MIDI output class."""
 
     def __init__(self, device, channel=1):
         if not hasattr(device, 'write'):
