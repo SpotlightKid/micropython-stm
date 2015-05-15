@@ -96,9 +96,11 @@ Micro Python v1.4.1-17-g9988618 on 2015-04-08; linux version
 
 # Booten im DFU-Modus
 
-* Pin **BOOT0** via Jumper-Kabel mit **5V** verbinden
+*Device Firmware Upgrade Mode*
+
+* Pin **BOOT0** via Jumper-Kabel mit **5V** verbinden.
 * Pin **BOOT1** (=**PB2**) via Jumper(-Kabel) mit **GND** verbinden (evtl. nicht notwendig).
-* Mini-USB-Port **CN1** zur Stromversorgung verbinden.
+* Mini-USB-Port **CN1** zur Stromversorgung verbinden (z.B. mit USB-Port am Computer).
 * Micro-USB-Port **CN5** mit USB-Port am Computer verbinden.
 * **Reset**-Knopf drücken.
 
@@ -147,3 +149,19 @@ Die Option `DEVICE` muss nur übergeben werden, falls sich die ermittelte USB-ID
 
 
 [1]: https://github.com/texane/stlink
+
+# Interaktive Konsole
+
+* Serielles-Terminalprogramm installieren, z.B. `miniterm.py` aus dem Paket `python-pyserial`.
+* Pin **PA10** via Jumper-Kabel mit **5V** verbinden, um Stromversorgung über USB-OTG-Anschluss (Micro-USB) zu ermöglichen.
+* USB-OTG-Anschluss mit USB-Anschluss am Computer verbinden. MicroPython bootet auf dem Discovery-Board und ein neues USB-Laufwerk (`PYBFLASH`) sowie eine neue serielle Schnittstelle (z.B. `/dev/ttyACM0`) sind verfügbar.
+* Terminalfenster öffnen und `miniterm.py` starten:
+
+      $ miniterm /dev/ttyACM0
+      Micro Python v1.4.2-84-g76abb2e on 2015-05-08; F4DISC with STM32F407
+      Type "help()" for more information.
+      >>> 
+
+* `Control-]` drücken, um `miniterm.py` zu beenden. MicroPython wird dabei *nicht* beendet.
+
+# Demotime

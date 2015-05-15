@@ -464,7 +464,8 @@ Micro Python v1.4.1-17-g9988618 on 2015-04-08; linux version
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Booten-im-DFU-Modus">Booten im DFU-Modus<a class="anchor-link" href="#Booten-im-DFU-Modus">&#182;</a></h1>
+<h1 id="Booten-im-DFU-Modus">Booten im DFU-Modus<a class="anchor-link" href="#Booten-im-DFU-Modus">&#182;</a></h1><p><em>Device Firmware Upgrade Mode</em></p>
+
 </div>
 </div>
 </div><div class="fragment" data-fragment-index="18">
@@ -475,9 +476,9 @@ Micro Python v1.4.1-17-g9988618 on 2015-04-08; linux version
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Pin <strong>BOOT0</strong> via Jumper-Kabel mit <strong>5V</strong> verbinden</li>
+<li>Pin <strong>BOOT0</strong> via Jumper-Kabel mit <strong>5V</strong> verbinden.</li>
 <li>Pin <strong>BOOT1</strong> (=<strong>PB2</strong>) via Jumper(-Kabel) mit <strong>GND</strong> verbinden (evtl. nicht notwendig).</li>
-<li>Mini-USB-Port <strong>CN1</strong> zur Stromversorgung verbinden.</li>
+<li>Mini-USB-Port <strong>CN1</strong> zur Stromversorgung verbinden (z.B. mit USB-Port am Computer).</li>
 <li>Micro-USB-Port <strong>CN5</strong> mit USB-Port am Computer verbinden.</li>
 <li><strong>Reset</strong>-Knopf drücken.</li>
 </ul>
@@ -547,6 +548,55 @@ $ make BOARD=STM32F4DISC DEVICE=0483:df11 V=1 deploy</code></pre>
 </li>
 </ul>
 
+</div>
+</div>
+</div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Interaktive-Konsole">Interaktive Konsole<a class="anchor-link" href="#Interaktive-Konsole">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment" data-fragment-index="23">
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Serielles-Terminalprogramm installieren, z.B. <code>miniterm.py</code> aus dem Paket <code>python-pyserial</code>.</li>
+<li>Pin <strong>PA10</strong> via Jumper-Kabel mit <strong>5V</strong> verbinden, um Stromversorgung über USB-OTG-Anschluss (Micro-USB) zu ermöglichen.</li>
+<li>USB-OTG-Anschluss mit USB-Anschluss am Computer verbinden. MicroPython bootet auf dem Discovery-Board und ein neues USB-Laufwerk (<code>PYBFLASH</code>) sowie eine neue serielle Schnittstelle (z.B. <code>/dev/ttyACM0</code>) sind verfügbar.</li>
+<li><p>Terminalfenster öffnen und <code>miniterm.py</code> starten:</p>
+
+<pre><code>$ miniterm /dev/ttyACM0
+Micro Python v1.4.2-84-g76abb2e on 2015-05-08; F4DISC with STM32F407
+Type "help()" for more information.
+&gt;&gt;&gt; </code></pre>
+</li>
+<li><p><code>Control-]</code> drücken, um <code>miniterm.py</code> zu beenden. MicroPython wird dabei <em>nicht</em> beendet.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+    </div></section>
+    </section><section>
+    <section>
+    
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Demotime">Demotime<a class="anchor-link" href="#Demotime">&#182;</a></h1>
 </div>
 </div>
 </div></section>
