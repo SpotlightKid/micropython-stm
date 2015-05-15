@@ -18,11 +18,11 @@
 
 # Pyboard
 
-<img src="PYBv1_0-B-no.jpg" />
+<img src="images/PYBv1_0-B-no.jpg" />
 
 # STM32F4DISCOVERY Evaluation Board
 
-<img src="stm32f4_discovery.jpg" />
+<img src="images/stm32f4_discovery.jpg" />
 
 # Features
 
@@ -36,7 +36,7 @@
 
 # Anschlüsse und Pins
 
-<img src="STM32F4DISCOVERY_overview.jpg" />
+<img src="images/STM32F4DISCOVERY_overview.jpg" />
 
 # Benötigte Hardware
 
