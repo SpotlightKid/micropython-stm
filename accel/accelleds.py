@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
+"""Turn LEDs on/off according to accelerometer measurements."""
+
 import pyb
+
 from staccel import STAccel
 
 

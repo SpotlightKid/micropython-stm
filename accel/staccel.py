@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 """Driver for accelerometer on STM32F4-Discovery board.
 
 Sets accelerometer range at +-2g.
 
-Returns tuple containing X,Y,Z axis acceleration values in 'g' units (9.8m/s^2).
+Returns tuple containing (X, Y, Z) axis acceleration values in 'g' units
+(9.8m/s^2).
 
 See:
 
